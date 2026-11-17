@@ -1,0 +1,47 @@
+Spec: Terminal
+
+Purpose:
+  Let a person turn candidate scenes and photos into one saved post.
+
+Owns:
+  ./main.rs
+  ./tui.rs
+
+Must:
+  Load settings, then apply flag and environment overrides in memory.
+  A named path that is missing fails and names the field.
+  Two empty media folders fail.
+  List candidate segments and photos.
+  The person trims a segment, groups cards, sets the kind, and edits the caption.
+  Save writes plan.json under the out folder and calls render for that post.
+  One key creates or deletes the empty chosen file on a saved post.
+  One key opens that post in the system viewer. On macOS the command is open.
+  The settings screen edits advise, api_base, model, api_key, and the three folders, then writes the settings file.
+  The key field is masked.
+  iPhone .heic and .mov files are accepted. A cloud-only placeholder fails and names the path.
+
+Must not:
+  Play video in the terminal.
+  Mark a post chosen while listing candidates.
+  Encode a candidate that the person has not saved.
+  Call the network itself.
+
+Depends on:
+  ./settings.sdd
+  ./inventory.sdd
+  ./segments.sdd
+  ./render.sdd
+  ./advise.sdd
+
+Scenario: save one post
+  Given three candidate segments from one clip
+  When the person groups two of them into a Story and saves
+  Then the out folder contains that Story
+  And the third segment is not encoded
+
+Scenario: chosen toggle
+  Given a saved post with no chosen file
+  When the person toggles it
+  Then an empty chosen file is in that post folder
+  When the person toggles it again
+  Then the chosen file is gone

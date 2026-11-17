@@ -1,0 +1,33 @@
+Spec: Settings
+
+Purpose:
+  Remember folders and advisor settings on this machine, outside the repo.
+
+Owns:
+  ./settings.rs
+
+Must:
+  The file is ~/Library/Application Support/story-maker/settings.toml on macOS.
+  The file is ${XDG_CONFIG_HOME:-~/.config}/story-maker/settings.toml on Linux.
+  --settings PATH replaces that location and is the file the terminal writes.
+  The directory mode is 0700 and the file mode is 0600.
+  Fields are advise, api_base, model, api_key, clips, photos, and out.
+  For one launch, a flag wins over the environment, and the environment wins over the file.
+  Environment names are STORY_MAKER_API_BASE, STORY_MAKER_MODEL, and STORY_MAKER_API_KEY.
+  Saving writes the file and does not copy an environment-only key into it.
+
+Must not:
+  Call ffmpeg, ffprobe, or the network.
+  Store the file inside this repo.
+
+Scenario: blank folders
+  Given the settings file has empty clips, photos, and out
+  And no flag supplies them
+  When the program starts
+  Then the settings screen opens before any media scan
+
+Scenario: environment key stays out of the file
+  Given the settings file has an empty api_key
+  And STORY_MAKER_API_KEY is set
+  When the person saves settings without typing a key
+  Then the file still has an empty api_key

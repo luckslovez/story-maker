@@ -1,0 +1,30 @@
+Spec: Render
+
+Purpose:
+  Encode the post the person saved.
+
+Owns:
+  ./render.rs
+
+Must:
+  Read plan.json and ignore the terminal.
+  Cut each card with ffmpeg, scale and pad to the post frame, and write H.264 post.mp4 with the source audio.
+  Write post.jpg for a photo card.
+  Write slice.txt and caption.txt from the plan.
+  slice.txt records source, start, end, and the person's note, or the source and times when the note is empty.
+  A Reel is one card. A Story is one to five. A carousel is two to ten.
+  A Story card and a carousel video slide are at most 60 seconds.
+  A Reel is as long as its moment, within the length Instagram accepts.
+  Stories and Reels are 9:16. Every carousel slide uses the first slide's frame.
+
+Must not:
+  Call the network.
+  Draw the terminal.
+  Mark a post chosen.
+  Join unrelated clips into one post.
+
+Scenario: save encodes one post
+  Given plan.json describes one Reel card from a source video
+  When render runs
+  Then post.mp4 is H.264 and keeps the source audio
+  And slice.txt names that source and its start and end

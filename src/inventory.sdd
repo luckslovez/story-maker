@@ -1,0 +1,22 @@
+Spec: Inventory
+
+Purpose:
+  Record what each media file is, without decoding frames.
+
+Owns:
+  ./inventory.rs
+
+Must:
+  ffprobe records filename, duration, width, height, and whether a video has audio.
+  Photos record filename, width, and height.
+
+Must not:
+  Decode frames.
+  Encode video.
+  Call the network.
+
+Scenario: long video is measured
+  Given a video longer than one hour
+  When inventory runs
+  Then the record includes its duration and dimensions
+  And no image frames are written

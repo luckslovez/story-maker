@@ -1,0 +1,37 @@
+# Rust build output
+/target/
+
+# Secrets
+.env
+.env.*
+*.pem
+
+# The settings file can hold an API key
+settings.toml
+
+# Media and rendered posts stay on disk, outside this repo
+*.wav
+*.aiff
+*.aif
+*.flac
+*.mp3
+*.m4a
+*.aac
+*.mp4
+*.mov
+*.m4v
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.heif
+*.webp
+*.gif
+
+# A local run must not land inside the repo
+/posts/
+/drafts/
+
+# macOS
+.DS_Store

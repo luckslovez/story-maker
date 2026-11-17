@@ -1,0 +1,21 @@
+Spec: Story Maker
+
+Purpose:
+  Turn a band's photos and videos into finished social posts a person can publish later.
+
+Structure:
+  ./src: Compose program
+  ./README.md: Overview for the band
+
+Must:
+  Compose is one Rust terminal program and runs on macOS and Linux.
+  The person passes folders of photos and video of any length and receives post folders.
+  A post is one situation, as a Reel, a Story, or a carousel.
+  Nothing is encoded until the person saves a post.
+  Posts are written only under the out folder.
+  Media, rendered posts, and the settings file stay outside this repo.
+
+Must not:
+  Schedule, upload, or attach a platform sound. That is a later program.
+  Play video inside the terminal.
+  Choose a built-in inference provider.

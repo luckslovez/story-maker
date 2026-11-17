@@ -1,0 +1,30 @@
+Spec: Segments
+
+Purpose:
+  Turn a video of any length into candidate stretches a person can choose.
+
+Owns:
+  ./segments.rs
+
+Must:
+  Scene changes come from ffmpeg at a scene threshold of 0.3.
+  The stretches between those times are the candidates, including the opening stretch.
+  A stretch shorter than 1 second merges into the previous one.
+  Each candidate records source, start, and end.
+
+Must not:
+  Encode video.
+  Drop the opening stretch.
+  Call the network.
+  Save a post.
+
+Scenario: short stretch merges
+  Given a scene stretch of half a second after an earlier stretch
+  When segments are built
+  Then the half-second stretch is part of the previous candidate
+
+Scenario: opening remains
+  Given a video whose first scene is the opening
+  When segments are built
+  Then the opening is a candidate
+  And no post file is written

@@ -1,0 +1,38 @@
+Spec: Advise
+
+Purpose:
+  Ask the person's chosen model for one suggested post, and leave the decision to them.
+
+Owns:
+  ./advise.rs
+
+Must:
+  Run only after the suggestion key when advise is on and both api_base and model are set.
+  POST {api-base}/chat/completions with the segment list and at most 24 JPEG frames per video.
+  Include a frame near the start and near the end when the file has more than one scene.
+  Convert HEIC photos to JPEG. Each image stays under 5 MB.
+  Send Authorization: Bearer only when a key is in effect.
+  Parse the reply as one post in the plan.json shape and show it in the terminal.
+
+Must not:
+  Encode video.
+  Write plan.json or a post folder.
+  Open a connection while advise is off.
+  Run when api_base or model is empty. The suggestion key opens settings instead.
+
+Scenario: advisor off
+  Given advise is off
+  When the person works through the candidate list
+  Then no network connection is opened
+
+Scenario: suggestion is not encoded
+  Given advise is on and the model returns a suggested Reel
+  When the person accepts the suggestion
+  Then the unsaved post shows that suggestion
+  And no post.mp4 is written until the person saves
+
+Scenario: bad reply
+  Given the model reply is not a post
+  When the suggestion returns
+  Then the error is shown
+  And the unsaved post is unchanged
